@@ -26,10 +26,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/api/clothes", routesC);
 
-app.get("/", (req, res) => {
-  res.end("funciona!");
-});
-
 app.listen(process.env.PORT || 5000, function () {
   console.log("Encendido");
 });
