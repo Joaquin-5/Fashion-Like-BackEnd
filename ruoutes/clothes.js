@@ -84,3 +84,18 @@ const saveInCloudinary = async (file) => {
   const { secure_url } = await cloudinary.uploader.upload(file.filepath);
   return secure_url;
 };
+
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  const clothes = await ClothesModel.findById(id);
+  if (!clothes) {
+    return res.status(404).json({ msg: `No existe esa ropa con el id: ${id}` });
+  }
+  try {
+    await ClothesModel.findByIdAndDelete(id);
+
+    return res.status(200).json({ msg: "La ropa fue eliminada correctamente" });
+  } catch (error) {
+    return res.status(500).json({ msg: "Error check server logs", error });
+  }
+});
