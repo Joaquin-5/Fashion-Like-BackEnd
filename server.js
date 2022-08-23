@@ -12,7 +12,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.static(__dirname + 'public'));
+app.use(express.static(__dirname + '/public'));
 
 const dbfile = require("./connection");
 
