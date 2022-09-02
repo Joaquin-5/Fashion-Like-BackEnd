@@ -19,6 +19,7 @@ app.use(express.static(path.join(__dirname, "public")));
 const dbfile = require("./connection");
 
 const routesC = require("./ruoutes/clothes");
+const routesA = require("./ruoutes/auth");
 
 //body parse
 
@@ -27,6 +28,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/api/clothes", routesC);
+app.use("/api/user",routesA);
 
 app.listen(process.env.PORT || 5000, function () {
   console.log("Encendido");
