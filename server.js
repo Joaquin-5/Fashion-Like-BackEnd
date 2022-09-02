@@ -1,6 +1,8 @@
 const express = require("express");
 require("dotenv").config();
 const app = express();
+const path = require("path");
+
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
@@ -12,7 +14,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(path.join(__dirname, "public")));
 
 const dbfile = require("./connection");
 
@@ -28,4 +30,8 @@ app.use("/api/clothes", routesC);
 
 app.listen(process.env.PORT || 5000, function () {
   console.log("Encendido");
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
