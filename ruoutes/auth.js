@@ -153,6 +153,14 @@ router.post("/login", async (req, res) => {
         },
       });
     }
+    if (!usuarioDB.emailVerified) {
+      return res.status(400).json({
+        ok: false,
+        err: {
+          message: "Por favor verifique su email"
+        }
+      })
+    }
     // Genera el token de autenticación
     let token = jwt.sign(
       {
