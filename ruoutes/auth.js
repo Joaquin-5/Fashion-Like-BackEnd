@@ -237,14 +237,16 @@ router.get("/check-auth/:token", async (req, res) => {
           },
         });
       }
-      const { email } = decoded;
-      UserModel.findOne({ email }, (err, userDB) => {
+      const { username } = decoded;
+      console.log({ decoded });
+      UserModel.findOne({ username }, (err, userDB) => {
         if (err) {
           return res.status(500).json({
             ok: false,
             err,
           });
         }
+        console.log(userDB);
         if (!userDB) {
           return res.status(400).json({
             ok: false,
@@ -267,7 +269,12 @@ router.get("/check-auth/:token", async (req, res) => {
         );
         res.json({
           ok: true,
-          user: userDB,
+          user: {
+            username: userDB.username,
+            email: userDB.eamil,
+            emailVerified: userDB.emailVerified,
+            role: userDB.role,
+          },
           token,
         });
       });
