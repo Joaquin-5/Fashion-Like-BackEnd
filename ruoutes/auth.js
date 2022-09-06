@@ -8,7 +8,9 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 // Email
-// const nodemailer = require("nodemailer");
+const nodemailer = require("nodemailer");
+const googleapis = require("googleapis");
+const OAuth2 = googleapis.google.auth.OAuth2;
 
 const user = new schema(
   {
@@ -91,6 +93,7 @@ router.post("/register", async (req, res) => {
         err,
       });
     }
+    sendEmailWithGmail(usuarioDB.email);
     res.json({
       ok: true,
       user: usuarioDB,
