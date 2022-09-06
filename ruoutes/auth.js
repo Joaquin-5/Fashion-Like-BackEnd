@@ -107,7 +107,7 @@ router.post("/register", async (req, res) => {
     email,
     password: bcrypt.hashSync(password, 10),
     emailVerified: false,
-    role:"ROLE_USER",
+    role: "ROLE_USER",
   });
   user.save((err, usuarioDB) => {
     if (err) {
@@ -157,9 +157,9 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({
         ok: false,
         err: {
-          message: "Por favor verifique su email"
-        }
-      })
+          message: "Por favor verifique su email",
+        },
+      });
     }
     // Genera el token de autenticación
     let token = jwt.sign(
@@ -167,7 +167,7 @@ router.post("/login", async (req, res) => {
         username: usuarioDB.username,
         email: usuarioDB.eamil,
         emailVerified: usuarioDB.emailVerified,
-        role: usuarioDB.role
+        role: usuarioDB.role,
       },
       process.env.SEED_AUTENTICACION,
       {
@@ -176,7 +176,12 @@ router.post("/login", async (req, res) => {
     );
     res.json({
       ok: true,
-      user: usuarioDB,
+      user: {
+        username: usuarioDB.username,
+        email: usuarioDB.eamil,
+        emailVerified: usuarioDB.emailVerified,
+        role: usuarioDB.role,
+      },
       token,
     });
   });
