@@ -224,3 +224,60 @@ const sendEmailWithGmail = (email) => {
     });
   });
 };
+
+router.get("/check-auth/:token", async (req, res) => {
+  const token = req.params.token;
+  if (token) {
+    jwt.verify(token, process.env.SEED_AUTENTICACION, (err, decoded) => {
+      if (err) {
+        return res.status(401).json({
+          ok: false,
+          err: {
+            message: "Token no válido",
+          },
+        });
+      }
+      const { email } = decoded;
+      UserModel.findOne({ email }, (err, userDB) => {
+        if (err) {
+          return res.status(500).json({
+            ok: false,
+            err,
+          });
+        }
+        if (!userDB) {
+          return res.status(400).json({
+            ok: false,
+            err: {
+              message: "Usuario no encontrado",
+            },
+          });
+        }
+        const token = jwt.sign(
+          {
+            email: userDB.email,
+            username: userDB.username,
+            emailVerified: userDB.emailVerified,
+            role: userDB.role,
+          },
+          process.env.SEED_AUTENTICACION,
+          {
+            expiresIn: process.env.CADUCIDAD_TOKEN,
+          }
+        );
+        res.json({
+          ok: true,
+          user: userDB,
+          token,
+        });
+      });
+    });
+  } else {
+    return res.status(401).json({
+      ok: false,
+      err: {
+        message: "Token no enviado",
+      },
+    });
+  }
+});
