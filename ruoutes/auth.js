@@ -101,13 +101,13 @@ const UserModel = mongoose.model("user", user);
 
 router.post("/register", async (req, res) => {
   let body = req.body;
-  let { username, email, password, role } = body;
+  let { username, email, password } = body;
   let user = new UserModel({
     username,
     email,
     password: bcrypt.hashSync(password, 10),
     emailVerified: false,
-    role,
+    role:"ROLE_USER",
   });
   user.save((err, usuarioDB) => {
     if (err) {
@@ -157,6 +157,10 @@ router.post("/login", async (req, res) => {
     let token = jwt.sign(
       {
         user: usuarioDB,
+        username: usuarioDB.username,
+        email: usuarioDB.eamil,
+        emailVerified: usuarioDB.emailVerified,
+        role: usuarioDB.role
       },
       process.env.SEED_AUTENTICACION,
       {
