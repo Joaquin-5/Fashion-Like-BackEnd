@@ -156,7 +156,6 @@ router.post("/login", async (req, res) => {
     // Genera el token de autenticación
     let token = jwt.sign(
       {
-        user: usuarioDB,
         username: usuarioDB.username,
         email: usuarioDB.eamil,
         emailVerified: usuarioDB.emailVerified,
