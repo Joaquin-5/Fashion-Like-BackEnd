@@ -248,7 +248,6 @@ router.get("/check-auth/:token", async (req, res) => {
             err,
           });
         }
-        console.log(userDB);
         if (!userDB) {
           return res.status(400).json({
             ok: false,
