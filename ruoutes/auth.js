@@ -195,7 +195,6 @@ const sendEmailWithGmail = (email) => {
           info,
         });
       } else {
-        console.log("Email sent");
         res
           .status(200)
           .json({ message: "Revisa tu email para verificar tu cuenta" });
@@ -217,7 +216,6 @@ router.get("/check-auth/:token", async (req, res) => {
         });
       }
       const { username } = decoded;
-      console.log({ decoded });
       User.findOne({ username }, (err, userDB) => {
         if (err) {
           return res.status(500).json({
