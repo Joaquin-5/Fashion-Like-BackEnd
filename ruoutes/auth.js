@@ -10,32 +10,12 @@ const jwt = require("jsonwebtoken");
 // Email
 const nodemailer = require("nodemailer");
 const googleapis = require("googleapis");
+const User = require("../models/user");
 const OAuth2 = googleapis.google.auth.OAuth2;
-
-const user = new schema(
-  {
-    username: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    emailVerified: { type: Boolean, default: false },
-    role: {
-      type: String,
-      enum: {
-        values: ["ROLE_ADMIN", "ROLE_USER"],
-        message: "{VALUE} no es un role válido",
-        default: "ROLE_USER",
-        required: true,
-      },
-    },
-  },
-  { timestamps: true }
-);
-
-const UserModel = mongoose.model("user", user);
 
 router.post("/send-email", (req, res) => {
   const { email } = req.body;
-  UserModel.findOne({ email }, (err, user) => {
+  User.findOne({ email }, (err, user) => {
     if (err) {
       res.status(500).send(err);
     } else if (!user) {
@@ -55,7 +35,7 @@ router.get("/verify-email/:token", (req, res) => {
         res.status(400).json({ message: "Token no válido" });
       } else {
         const { email } = decodedToken;
-        UserModel.findOneAndUpdate(
+        User.findOneAndUpdate(
           { email },
           { emailVerified: true },
           { new: true },
@@ -79,7 +59,7 @@ router.get("/verify-email/:token", (req, res) => {
 router.post("/register", async (req, res) => {
   let body = req.body;
   let { username, email, password } = body;
-  let user = new UserModel({
+  let user = new User({
     username,
     email,
     password: bcrypt.hashSync(password, 10),
@@ -106,7 +86,7 @@ module.exports = router;
 router.post("/login", async (req, res) => {
   let body = req.body;
 
-  UserModel.findOne({ email: body.email }, (erro, usuarioDB) => {
+  User.findOne({ email: body.email }, (erro, usuarioDB) => {
     if (erro) {
       return res.status(500).json({
         ok: false,
@@ -239,7 +219,7 @@ router.get("/check-auth/:token", async (req, res) => {
       }
       const { username } = decoded;
       console.log({ decoded });
-      UserModel.findOne({ username }, (err, userDB) => {
+      User.findOne({ username }, (err, userDB) => {
         if (err) {
           return res.status(500).json({
             ok: false,
