@@ -10,7 +10,7 @@ const user = new schema(
     role: {
       type: String,
       enum: {
-        values: ["ROLE_ADMIN", "ROLE_USER"],
+        values: ["ROLE_ADMIN", "ROLE_USER", "ROLE_OWNER"],
         message: "{VALUE} no es un role válido",
         default: "ROLE_USER",
         required: true,
