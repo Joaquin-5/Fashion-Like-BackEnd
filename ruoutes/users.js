@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await User.find({ role: { $ne: "ROLE_OWNER" } });
     res.status(200).json({
       ok: true,
       users: users.map((user) => {
