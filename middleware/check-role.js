@@ -9,12 +9,12 @@ module.exports = async (req, res, next) => {
     const decoded = await decodeToken(token);
     // Add user from payload
     req.user = decoded;
-    if (req.user.role === "ROLE_ADMIN") {
+    if (req.user.role === "ROLE_OWNER") {
       next();
     } else {
       return res.status(401).send({
         ok: false,
-        error: "You are not an admin.",
+        error: "You are not an owner.",
       });
     }
   } catch (error) {
